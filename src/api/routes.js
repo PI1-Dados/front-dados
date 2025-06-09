@@ -2,11 +2,11 @@ import axios from "./axios"
 
 const BASE_URL="/experimentos"
 
-export const createExperiment = (data) => {
+export const createExperiment = async (data) => {
     try {
-        const response = axios.post(
+        const response = await axios.post(
             `${BASE_URL}/novo`,
-            data
+            JSON.stringify(data)
         )
         return response.data;   
     } catch (err) {
@@ -15,9 +15,9 @@ export const createExperiment = (data) => {
     }
 }
 
-export const updateExperiment = (id, data) => {
+export const updateExperiment = async (id, data) => {
     try {
-        const response = axios.patch(
+        const response = await axios.patch(
             `${BASE_URL}/${id}`,
             data
         )
@@ -28,9 +28,9 @@ export const updateExperiment = (id, data) => {
     }
 }
 
-export const getExperiment = (id) => {
+export const getExperiment = async (id) => {
     try {
-        const response = axios.get(
+        const response = await axios.get(
             `${BASE_URL}/${id}`,
         )
         return response.data;   
@@ -40,9 +40,9 @@ export const getExperiment = (id) => {
     }
 }
 
-export const getExperiments = () => {
+export const getExperiments = async () => {
     try {
-        const response = axios.get(
+        const response = await axios.get(
             BASE_URL,
         )
         return response.data;   
@@ -52,9 +52,9 @@ export const getExperiments = () => {
     }
 }
 
-export const deleteExperiment = (id) => {
+export const deleteExperiment = async (id) => {
     try {
-        const response = axios.delete(
+        const response = await axios.delete(
             `${BASE_URL}/${id}`,
         )
         return response.data;   
