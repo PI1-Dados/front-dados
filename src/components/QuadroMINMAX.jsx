@@ -1,16 +1,16 @@
 import React, {useMemo} from 'react'
 
-const QuadroMINMAX = ({ variable, unit }) => {
+const QuadroMINMAX = ({ variable, label, unit }) => {
     // useMemo para evitar recálculos desnecessários
     const stats = useMemo(() => {
         if (!variable || !variable.data || variable.data.length === 0) {
             return { max: 0, avg: 0 };
         }
-        const values = variable.data.map(item => item.value);
+        const values = variable.data.map(item => item[label]);
         const max = Math.max(...values);
         const avg = values.reduce((acc, val) => acc + val, 0) / values.length;
         return { max, avg: avg.toFixed(1) };
-    }, [variable]);
+    }, [variable, label]);
 
     const variableName = variable ? variable.label : "N/D";
 

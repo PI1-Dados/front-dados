@@ -1,12 +1,12 @@
 import React from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-const ChartCard = ({ title, chartData }) => {
+const ChartCard = ({ title, dataKey, chartData, unit }) => {
   return (
-    <div className=" p-8
+    <div className=" p-4
   shadow-[30px_24px_21.2px_-1px_rgba(4,6,12,0.24)] rounded-[40px] border border-[#394976] w-full flex flex-col items-center justify-center m-2">
       <h3 className="text-white text-lg font-semibold  ">{title}</h3>
-      <ResponsiveContainer width="100%" height={250}>
+      <ResponsiveContainer width="100%" height={250} style={{ padding: 4 }}>
         <AreaChart
           data={chartData}
           width={300}
@@ -30,7 +30,7 @@ const ChartCard = ({ title, chartData }) => {
             labelStyle={{ color: '#ffffff' }}
             itemStyle={{ color: '#ffffff' }}
           />
-          <Area type="monotone" dataKey="value" stroke="#38a169" fill="url(#colorGradient)" strokeWidth={2} />
+          <Area type="monotone" dataKey={`${dataKey}`} stroke="#38a169" fill="url(#colorGradient)" strokeWidth={2} unit={unit}/>
           <defs>
             <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor="#38a169" stopOpacity={0.8} />

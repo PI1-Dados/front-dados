@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import React from "react";
-import ChartCard from "./components/AreaGraficos";
+import ChartCard from "./components/ChartCard";
 import QuadroInfo from "./components/QuadroInfo";
 import QuadroMINMAX from "./components/QuadroMINMAX";
 import SelectVariaveis from "./components/SelectVariaveis";
@@ -98,6 +98,7 @@ function App() {
 
   const [experiments, setExperiments] = useState([]);
   const [experiment, setExperiment] = useState(null);
+  const [rawChartData, setRawChartData] = useState(null);
   const [chartData, setChartData] = useState(null);
 
   const [dadosVariavelQuadro, setDadosVariavelQuadro] = useState(null);
@@ -111,7 +112,7 @@ function App() {
   ];
 
   const unidades = {
-    velocity: "m/s",
+    velocity: "km/h",
     height: "m",
     distance: "m",
     acceleration: "m/s²",
@@ -137,25 +138,26 @@ function App() {
     try {
       const response = await getExperiment(id);
       console.log(response);
-      setExperiment(response);
+      setExperiment(response.experimento);
+      setRawChartData(response.dados_associados);
     } catch (err) {
       console.error(err);
     }
   }
 
   useEffect(() => {
-    if (experiment == null) return;
+    if (rawChartData == null) return;
     const formatChartData = () => {
       const velocity = [];
       const distance = [];
       const acceleration = [];
       const height = [];
 
-      experiment.dados_associados.forEach((data) => {
-        velocity.push({ timestamp: data.timestamp, value: data.speed_kmph });
-        distance.push({ timestamp: data.timestamp, value: data.distancia });
-        acceleration.push({ timestamp: data.timestamp, value: [data.accel_x, data.accel_y, data.accel_z] });
-        height.push({ timestamp: data.timestamp, value: 5 });
+      rawChartData.forEach((data) => {
+        velocity.push({ timestamp: data.timestamp, velocity: data.speed_kmph, unit: "km/h" });
+        distance.push({ timestamp: data.timestamp, distance: parseFloat(data.distancia.toFixed(2)) });
+        acceleration.push({ timestamp: data.timestamp, acceleration: [data.accel_x, data.accel_y, data.accel_z] });
+        height.push({ timestamp: data.timestamp, height: 5 });
       });
 
       setChartData({ velocity, distance, acceleration, height });
@@ -201,10 +203,10 @@ function App() {
           <>
             <div className=" w-full">
               <div className="flex flex-row justify-between items-center p-4">
-                <QuadroInfo />
+                <QuadroInfo experiment={experiment} />
                 <div className="flex flex-col justify-center items-center ">
                   <h1 className=" text-[64px] font-bold  text-white mb-2">
-                    LANÇAMENTO Nº
+                    {experiment.nome}
                   </h1>
                   <div className="flex flex-row gap-3 justify-between items-center w-full">
                     <SelectVariaveis
@@ -224,7 +226,11 @@ function App() {
                     />
                   </div>
                 </div>
-                <QuadroMINMAX variable={dadosVariavelQuadro} unit={unidadeSelecionada} />
+                <QuadroMINMAX 
+                  variable={dadosVariavelQuadro}
+                  label={variavelQuadro.value}
+                  unit={unidadeSelecionada}
+                />
               </div>
             </div>
             {/*GRAFICOS*/}
@@ -234,7 +240,9 @@ function App() {
                   <ChartCard
                     key={opcao.value}
                     title={opcao.label}
+                    dataKey={opcao.value}
                     chartData={chartData[opcao.value]}
+                    unit={unidades[opcao.value]}
                   />
                 ))}
               </main>
