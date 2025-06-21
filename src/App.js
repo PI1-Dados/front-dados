@@ -10,92 +10,10 @@ import { getExperiment, getExperiments } from "./api/routes";
 import ModalCadastro from "./components/ModalCadastro";
 import Header from "./components/Header";
 import AddchartTwoToneIcon from '@mui/icons-material/AddchartTwoTone';
-import Icon from "@mui/material/Icon";
-
-  // const mockChartData = {
-  //   velocidade: [
-  //     { name: "0s", value: 0 },
-  //     { name: "1s", value: 10 },
-  //     { name: "2s", value: 25 },
-  //     { name: "3s", value: 45 },
-  //     { name: "4s", value: 70 },
-  //     { name: "5s", value: 100 },
-  //   ],
-  //   altura: [
-  //     { name: "0s", value: 1000 },
-  //     { name: "1s", value: 980 },
-  //     { name: "2s", value: 940 },
-  //     { name: "3s", value: 880 },
-  //     { name: "4s", value: 800 },
-  //     { name: "5s", value: 700 },
-  //   ],
-  //   distancia: [
-  //     { name: "0s", value: 0 },
-  //     { name: "1s", value: 100 },
-  //     { name: "2s", value: 210 },
-  //     { name: "3s", value: 330 },
-  //     { name: "4s", value: 460 },
-  //     { name: "5s", value: 600 },
-  //   ],
-  //   aceleracao: [
-  //     { name: "0s", value: 10 },
-  //     { name: "1s", value: 15 },
-  //     { name: "2s", value: 20 },
-  //     { name: "3s", value: 25 },
-  //     { name: "4s", value: 30 },
-  //     { name: "5s", value: 35 },
-  //   ],
-  // };
-
-    // const experimentsData = [
-  //   {
-  //     id: 1,
-  //     meta: "10M",
-  //     data: "20/05/2025",
-  //     horario: "16:00",
-  //     status: "Falha",
-  //   },
-  //   {
-  //     id: 2,
-  //     meta: "20M",
-  //     data: "22/05/2025",
-  //     horario: "16:00",
-  //     status: "Sucesso",
-  //   },
-  //   {
-  //     id: 3,
-  //     meta: "5M",
-  //     data: "23/05/2025",
-  //     horario: "10:30",
-  //     status: "Em Andamento",
-  //   },
-  //   {
-  //     id: 4,
-  //     meta: "50M",
-  //     data: "28/05/2025",
-  //     horario: "19:00",
-  //     status: "Sucesso",
-  //   },
-  //   {
-  //     id: 5,
-  //     meta: "15M",
-  //     data: "30/05/2025",
-  //     horario: "11:00",
-  //     status: "Falha",
-  //   },
-  //   {
-  //     id: 6,
-  //     meta: "100M",
-  //     data: "02/06/2025",
-  //     horario: "09:00",
-  //     status: "Sucesso",
-  //   },
-  // ];
+import AccelChartCard from "./components/AccelChartCard";
 
 function App() {
   // modais
-  const [openCadastro, setOpenCadastro] = useState(false);
-
   const [experiments, setExperiments] = useState([]);
   const [experiment, setExperiment] = useState(null);
   const [rawChartData, setRawChartData] = useState(null);
@@ -119,7 +37,7 @@ function App() {
   };
 
   const [opcoesGraficos, setOpcoesGraficos] = useState([interesses[0]]);
-  const [variavelQuadro, setVariavelQuadro] = useState(interesses[1]);
+  const [variavelQuadro, setVariavelQuadro] = useState(interesses[0]);
 
   useEffect(() => {
     const fetchExperiments = async () => {
@@ -156,7 +74,7 @@ function App() {
       rawChartData.forEach((data) => {
         velocity.push({ timestamp: data.timestamp, velocity: data.speed_kmph, unit: "km/h" });
         distance.push({ timestamp: data.timestamp, distance: parseFloat(data.distancia.toFixed(2)) });
-        acceleration.push({ timestamp: data.timestamp, acceleration: [data.accel_x, data.accel_y, data.accel_z] });
+        acceleration.push({ timestamp: data.timestamp, accel_x: data.accel_x, accel_y: data.accel_y, accel_z: data.accel_z });
         height.push({ timestamp: data.timestamp, height: 5 });
       });
 
@@ -236,15 +154,25 @@ function App() {
             {/*GRAFICOS*/}
             {opcoesGraficos.length > 0 ? (
               <main className={`grid ${getGridColsClass()} gap-3 w-full px-7`}>
-                {opcoesGraficos.map((opcao) => (
-                  <ChartCard
-                    key={opcao.value}
-                    title={opcao.label}
-                    dataKey={opcao.value}
-                    chartData={chartData[opcao.value]}
-                    unit={unidades[opcao.value]}
-                  />
-                ))}
+                {opcoesGraficos.map((opcao) => {
+                  if (opcao.value === "acceleration") {
+                    return (
+                      <AccelChartCard 
+                        chartData={chartData.acceleration}
+                      />
+                    )
+                  } else {
+                    return (
+                      <ChartCard
+                        key={opcao.value}
+                        title={opcao.label}
+                        dataKey={opcao.value}
+                        chartData={chartData[opcao.value]}
+                        unit={unidades[opcao.value]}
+                      />
+                    )
+                  }
+                })}
               </main>
             ) : (
               <div className="text-center text-gray-500 mt-16">
@@ -265,9 +193,6 @@ function App() {
             </p>
           </div>
         )}
-
-        {/*MEIO*/}
-
         {/*BAIXO*/}
         <div className=" justify-center items-center w-full">
           <TabelaExp
