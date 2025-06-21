@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import React, { useState } from "react";
-import Unb from "./assets/Unb.png";
+import React from "react";
 import ChartCard from "./components/AreaGraficos";
 import QuadroInfo from "./components/QuadroInfo";
 import QuadroMINMAX from "./components/QuadroMINMAX";
@@ -9,6 +8,7 @@ import SelectVariaveis from "./components/SelectVariaveis";
 import TabelaExp from "./components/TabelaExp";
 import { getExperiment, getExperiments } from "./api/routes";
 import ModalCadastro from "./components/ModalCadastro";
+import Header from "./components/Header";
 
 function App() {
   // modais
@@ -16,7 +16,7 @@ function App() {
 
   const [experimentos, setExperimentos] = useState([]);
   const [experimento, setExperimento] = useState(null);
-  
+
   useEffect(() => {
     const fetchExperimentos = async () => {
       try {
@@ -81,69 +81,71 @@ function App() {
     { value: "distancia", label: "Distancia" },
     { value: "aceleracao", label: "Aceleração" },
   ];
-  const experimentsData = [
-    {
-      id: 1,
-      meta: "10M",
-      data: "20/05/2025",
-      horario: "16:00",
-      status: "Falha",
-    },
-    {
-      id: 2,
-      meta: "20M",
-      data: "22/05/2025",
-      horario: "16:00",
-      status: "Sucesso",
-    },
-    {
-      id: 3,
-      meta: "5M",
-      data: "23/05/2025",
-      horario: "10:30",
-      status: "Em Andamento",
-    },
-    {
-      id: 4,
-      meta: "50M",
-      data: "28/05/2025",
-      horario: "19:00",
-      status: "Sucesso",
-    },
-    {
-      id: 5,
-      meta: "15M",
-      data: "30/05/2025",
-      horario: "11:00",
-      status: "Falha",
-    },
-    {
-      id: 6,
-      meta: "100M",
-      data: "02/06/2025",
-      horario: "09:00",
-      status: "Sucesso",
-    },
-  ];
+
+  // const experimentsData = [
+  //   {
+  //     id: 1,
+  //     meta: "10M",
+  //     data: "20/05/2025",
+  //     horario: "16:00",
+  //     status: "Falha",
+  //   },
+  //   {
+  //     id: 2,
+  //     meta: "20M",
+  //     data: "22/05/2025",
+  //     horario: "16:00",
+  //     status: "Sucesso",
+  //   },
+  //   {
+  //     id: 3,
+  //     meta: "5M",
+  //     data: "23/05/2025",
+  //     horario: "10:30",
+  //     status: "Em Andamento",
+  //   },
+  //   {
+  //     id: 4,
+  //     meta: "50M",
+  //     data: "28/05/2025",
+  //     horario: "19:00",
+  //     status: "Sucesso",
+  //   },
+  //   {
+  //     id: 5,
+  //     meta: "15M",
+  //     data: "30/05/2025",
+  //     horario: "11:00",
+  //     status: "Falha",
+  //   },
+  //   {
+  //     id: 6,
+  //     meta: "100M",
+  //     data: "02/06/2025",
+  //     horario: "09:00",
+  //     status: "Sucesso",
+  //   },
+  // ];
 
   const unidades = {
     velocidade: "m/s",
     altura: "m",
     distancia: "m",
     aceleracao: "m/s²",
-};
+  };
 
   const [opcoesGraficos, setOpcoesGraficos] = useState([interesses[0]]);
   const [variavelQuadro, setVariavelQuadro] = useState(interesses[1]);
-  
+
   const dadosVariavelQuadro = {
-        ...variavelQuadro,
-        data: mockChartData[variavelQuadro.value]
-    };
-    
-    // Pega a unidade correta com base na variável selecionada
-    const unidadeSelecionada = unidades[variavelQuadro.value];
+    ...variavelQuadro,
+    data: mockChartData[variavelQuadro.value]
+  };
+
+  // Pega a unidade correta com base na variável selecionada
+  const unidadeSelecionada = unidades[variavelQuadro.value];
   console.log("Dados da variável do quadro:", dadosVariavelQuadro);
+
   const getGridColsClass = () => {
     const count = opcoesGraficos.length;
     switch (count) {
@@ -157,6 +159,7 @@ function App() {
         return "grid-cols-1";
     }
   };
+
   return (
     <div className="flex justify-center items-center  w-screen bg-[#0C101C] font-jura ">
       <div
@@ -165,18 +168,7 @@ function App() {
   bg-[linear-gradient(112deg,_#161D30_20.1%,_rgba(42,53,83,0.73)_94.38%)] 
   shadow-[30px_24px_21.2px_-1px_rgba(4,6,12,0.24)] rounded-[40px] mt-5 w-[90vw] flex flex-col gap-2"
       >
-        <div className=" w-full">
-          {/*TOPO*/}
-          <div className="flex justify-between p-6 items-center ">
-            <img src={Unb} alt="Descrição da imagem" />
-            <button className="bg-[#008940] text-white text-2xl p-3 rounded-[25px]">
-              Registrar Lançamento
-            </button>
-            <button className="bg-[#133E79] text-white text-2xl p-3 rounded-[25px]">
-              DOWNLOAD CSV
-            </button>
-          </div>
-        </div>
+        <Header />
         {/*MEIO*/}
         <div className=" w-full">
           <div className="flex flex-row justify-between items-center p-4">
@@ -186,8 +178,21 @@ function App() {
                 LANÇAMENTO Nº
               </h1>
               <div className="flex flex-row gap-3 justify-between items-center w-full">
-                 <SelectVariaveis selecionados={opcoesGraficos} onSelectionChange={setOpcoesGraficos} options={interesses} placeholder="Selecione até 3 variáveis para os gráficos..." isMulti={true} maxSelections={3}/>
-                 <SelectVariaveis selecionados={variavelQuadro} onSelectionChange={setVariavelQuadro} options={interesses} placeholder="Selecione uma variável..." isMulti={false}/>
+                <SelectVariaveis
+                  selecionados={opcoesGraficos}
+                  onSelectionChange={setOpcoesGraficos}
+                  options={interesses}
+                  placeholder="Selecione até 3 variáveis para os gráficos..."
+                  isMulti={true}
+                  maxSelections={3}
+                />
+                <SelectVariaveis
+                  selecionados={variavelQuadro}
+                  onSelectionChange={setVariavelQuadro}
+                  options={interesses}
+                  placeholder="Selecione uma variável..."
+                  isMulti={false}
+                />
               </div>
             </div>
             <QuadroMINMAX variable={dadosVariavelQuadro} unit={unidadeSelecionada} />
@@ -215,10 +220,13 @@ function App() {
         )}
         {/*BAIXO*/}
         <div className=" justify-center items-center w-full">
-          <TabelaExp experiments={experimentsData} />
+          <TabelaExp
+            experimentsData={experimentos}
+            fetchExperimento={fetchExperimento}
+          />
         </div>
       </div>
-    </>
+    </div>
   );
 }
 export default App;

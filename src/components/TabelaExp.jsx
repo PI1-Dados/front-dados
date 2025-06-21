@@ -22,7 +22,7 @@ import React from 'react';
 // };
 
 
-const TabelaExp = ({ experiments }) =>{
+const TabelaExp = ({ experimentsData, fetchExperimento }) =>{
   return (
     <div className='w-full flex justify-center items-center p-5'>
       <div className="w-[100%] items-center justify-center    rounded-[20px] border border-[#394976] bg-[linear-gradient(112deg,_#161D30_20.1%,_rgba(42,53,83,0.73)_94.38%)] shadow-lg">
