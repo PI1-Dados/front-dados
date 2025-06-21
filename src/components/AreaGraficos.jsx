@@ -1,10 +1,6 @@
 import React from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-// Dados de exemplo para o gráfico
-// Você pode substituir isso pelos seus dados reais
-
-
 const ChartCard = ({ title, chartData }) => {
   return (
     <div className=" p-8
@@ -22,7 +18,7 @@ const ChartCard = ({ title, chartData }) => {
           }}
         >
           <CartesianGrid strokeDasharray="3 3" stroke="#4a5568" vertical={false} />
-          <XAxis dataKey="name" stroke="#cbd5e0" tick={{ fill: '#cbd5e0' }} />
+          <XAxis dataKey="timestamp" stroke="#cbd5e0" tick={{ fill: '#cbd5e0' }} />
           <YAxis stroke="#cbd5e0" tick={{ fill: '#cbd5e0' }} domain={[0, 7]} />
           <Tooltip
             contentStyle={{

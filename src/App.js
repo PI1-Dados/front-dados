@@ -9,80 +9,45 @@ import TabelaExp from "./components/TabelaExp";
 import { getExperiment, getExperiments } from "./api/routes";
 import ModalCadastro from "./components/ModalCadastro";
 import Header from "./components/Header";
+import AddchartTwoToneIcon from '@mui/icons-material/AddchartTwoTone';
+import Icon from "@mui/material/Icon";
 
-function App() {
-  // modais
-  const [openCadastro, setOpenCadastro] = useState(false);
+  // const mockChartData = {
+  //   velocidade: [
+  //     { name: "0s", value: 0 },
+  //     { name: "1s", value: 10 },
+  //     { name: "2s", value: 25 },
+  //     { name: "3s", value: 45 },
+  //     { name: "4s", value: 70 },
+  //     { name: "5s", value: 100 },
+  //   ],
+  //   altura: [
+  //     { name: "0s", value: 1000 },
+  //     { name: "1s", value: 980 },
+  //     { name: "2s", value: 940 },
+  //     { name: "3s", value: 880 },
+  //     { name: "4s", value: 800 },
+  //     { name: "5s", value: 700 },
+  //   ],
+  //   distancia: [
+  //     { name: "0s", value: 0 },
+  //     { name: "1s", value: 100 },
+  //     { name: "2s", value: 210 },
+  //     { name: "3s", value: 330 },
+  //     { name: "4s", value: 460 },
+  //     { name: "5s", value: 600 },
+  //   ],
+  //   aceleracao: [
+  //     { name: "0s", value: 10 },
+  //     { name: "1s", value: 15 },
+  //     { name: "2s", value: 20 },
+  //     { name: "3s", value: 25 },
+  //     { name: "4s", value: 30 },
+  //     { name: "5s", value: 35 },
+  //   ],
+  // };
 
-  const [experimentos, setExperimentos] = useState([]);
-  const [experimento, setExperimento] = useState(null);
-
-  useEffect(() => {
-    const fetchExperimentos = async () => {
-      try {
-        const response = await getExperiments();
-        // console.log(response);
-        setExperimentos(response.experimentos);
-      } catch (err) {
-        console.error(err);
-      }
-    }
-    fetchExperimentos();
-  }, [])
-
-  const fetchExperimento = async (id) => {
-    try {
-      const response = await getExperiment(id);
-      console.log(response);
-      setExperimento(response);
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  const mockChartData = {
-    velocidade: [
-      { name: "0s", value: 0 },
-      { name: "1s", value: 10 },
-      { name: "2s", value: 25 },
-      { name: "3s", value: 45 },
-      { name: "4s", value: 70 },
-      { name: "5s", value: 100 },
-    ],
-    altura: [
-      { name: "0s", value: 1000 },
-      { name: "1s", value: 980 },
-      { name: "2s", value: 940 },
-      { name: "3s", value: 880 },
-      { name: "4s", value: 800 },
-      { name: "5s", value: 700 },
-    ],
-    distancia: [
-      { name: "0s", value: 0 },
-      { name: "1s", value: 100 },
-      { name: "2s", value: 210 },
-      { name: "3s", value: 330 },
-      { name: "4s", value: 460 },
-      { name: "5s", value: 600 },
-    ],
-    aceleracao: [
-      { name: "0s", value: 10 },
-      { name: "1s", value: 15 },
-      { name: "2s", value: 20 },
-      { name: "3s", value: 25 },
-      { name: "4s", value: 30 },
-      { name: "5s", value: 35 },
-    ],
-  };
-
-  const interesses = [
-    { value: "velocidade", label: "Velocidade" },
-    { value: "altura", label: "Altura" },
-    { value: "distancia", label: "Distancia" },
-    { value: "aceleracao", label: "Aceleração" },
-  ];
-
-  // const experimentsData = [
+    // const experimentsData = [
   //   {
   //     id: 1,
   //     meta: "10M",
@@ -127,24 +92,87 @@ function App() {
   //   },
   // ];
 
+function App() {
+  // modais
+  const [openCadastro, setOpenCadastro] = useState(false);
+
+  const [experiments, setExperiments] = useState([]);
+  const [experiment, setExperiment] = useState(null);
+  const [chartData, setChartData] = useState(null);
+
+  const [dadosVariavelQuadro, setDadosVariavelQuadro] = useState(null);
+
+
+  const interesses = [
+    { value: "velocity", label: "Velocidade" },
+    { value: "height", label: "Altura" },
+    { value: "distance", label: "Distancia" },
+    { value: "acceleration", label: "Aceleração" },
+  ];
+
   const unidades = {
-    velocidade: "m/s",
-    altura: "m",
-    distancia: "m",
-    aceleracao: "m/s²",
+    velocity: "m/s",
+    height: "m",
+    distance: "m",
+    acceleration: "m/s²",
   };
 
   const [opcoesGraficos, setOpcoesGraficos] = useState([interesses[0]]);
   const [variavelQuadro, setVariavelQuadro] = useState(interesses[1]);
 
-  const dadosVariavelQuadro = {
-    ...variavelQuadro,
-    data: mockChartData[variavelQuadro.value]
-  };
+  useEffect(() => {
+    const fetchExperiments = async () => {
+      try {
+        const response = await getExperiments();
+        // console.log(response);
+        setExperiments(response.experimentos);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    fetchExperiments();
+  }, [])
+
+  const fetchExperiment = async (id) => {
+    try {
+      const response = await getExperiment(id);
+      console.log(response);
+      setExperiment(response);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  useEffect(() => {
+    if (experiment == null) return;
+    const formatChartData = () => {
+      const velocity = [];
+      const distance = [];
+      const acceleration = [];
+      const height = [];
+
+      experiment.dados_associados.forEach((data) => {
+        velocity.push({ timestamp: data.timestamp, value: data.speed_kmph });
+        distance.push({ timestamp: data.timestamp, value: data.distancia });
+        acceleration.push({ timestamp: data.timestamp, value: [data.accel_x, data.accel_y, data.accel_z] });
+        height.push({ timestamp: data.timestamp, value: 5 });
+      });
+
+      setChartData({ velocity, distance, acceleration, height });
+    }
+    formatChartData();
+  }, [experiment]);
+
+  useEffect(() => {
+    if (chartData == null) return;
+    setDadosVariavelQuadro({
+      ...variavelQuadro,
+      data: chartData[variavelQuadro.value]
+    });
+  }, [chartData, variavelQuadro]);
 
   // Pega a unidade correta com base na variável selecionada
   const unidadeSelecionada = unidades[variavelQuadro.value];
-  console.log("Dados da variável do quadro:", dadosVariavelQuadro);
 
   const getGridColsClass = () => {
     const count = opcoesGraficos.length;
@@ -169,60 +197,74 @@ function App() {
   shadow-[30px_24px_21.2px_-1px_rgba(4,6,12,0.24)] rounded-[40px] mt-5 w-[90vw] flex flex-col gap-2"
       >
         <Header />
-        {/*MEIO*/}
-        <div className=" w-full">
-          <div className="flex flex-row justify-between items-center p-4">
-            <QuadroInfo />
-            <div className="flex flex-col justify-center items-center ">
-              <h1 className=" text-[64px] font-bold  text-white mb-2">
-                LANÇAMENTO Nº
-              </h1>
-              <div className="flex flex-row gap-3 justify-between items-center w-full">
-                <SelectVariaveis
-                  selecionados={opcoesGraficos}
-                  onSelectionChange={setOpcoesGraficos}
-                  options={interesses}
-                  placeholder="Selecione até 3 variáveis para os gráficos..."
-                  isMulti={true}
-                  maxSelections={3}
-                />
-                <SelectVariaveis
-                  selecionados={variavelQuadro}
-                  onSelectionChange={setVariavelQuadro}
-                  options={interesses}
-                  placeholder="Selecione uma variável..."
-                  isMulti={false}
-                />
+        {chartData != null ? (
+          <>
+            <div className=" w-full">
+              <div className="flex flex-row justify-between items-center p-4">
+                <QuadroInfo />
+                <div className="flex flex-col justify-center items-center ">
+                  <h1 className=" text-[64px] font-bold  text-white mb-2">
+                    LANÇAMENTO Nº
+                  </h1>
+                  <div className="flex flex-row gap-3 justify-between items-center w-full">
+                    <SelectVariaveis
+                      selecionados={opcoesGraficos}
+                      onSelectionChange={setOpcoesGraficos}
+                      options={interesses}
+                      placeholder="Selecione até 3 variáveis para os gráficos..."
+                      isMulti={true}
+                      maxSelections={3}
+                    />
+                    <SelectVariaveis
+                      selecionados={variavelQuadro}
+                      onSelectionChange={setVariavelQuadro}
+                      options={interesses}
+                      placeholder="Selecione uma variável..."
+                      isMulti={false}
+                    />
+                  </div>
+                </div>
+                <QuadroMINMAX variable={dadosVariavelQuadro} unit={unidadeSelecionada} />
               </div>
             </div>
-            <QuadroMINMAX variable={dadosVariavelQuadro} unit={unidadeSelecionada} />
-          </div>
-        </div>
-        {/*GRAFICOS*/}
-        {opcoesGraficos.length > 0 ? (
-          <main className={`grid ${getGridColsClass()} gap-3 w-full px-7`}>
-            {opcoesGraficos.map((opcao) => (
-              <ChartCard
-                key={opcao.value}
-                title={opcao.label}
-                chartData={mockChartData[opcao.value]}
-              />
-            ))}
-          </main>
+            {/*GRAFICOS*/}
+            {opcoesGraficos.length > 0 ? (
+              <main className={`grid ${getGridColsClass()} gap-3 w-full px-7`}>
+                {opcoesGraficos.map((opcao) => (
+                  <ChartCard
+                    key={opcao.value}
+                    title={opcao.label}
+                    chartData={chartData[opcao.value]}
+                  />
+                ))}
+              </main>
+            ) : (
+              <div className="text-center text-gray-500 mt-16">
+                <p className="text-2xl">Nenhuma variável selecionada.</p>
+                <p>
+                  Por favor, selecione uma ou mais opções para começar a visualizar
+                  os dados.
+                </p>
+              </div>
+            )}
+          </>        
         ) : (
           <div className="text-center text-gray-500 mt-16">
-            <p className="text-2xl">Nenhuma variável selecionada.</p>
+            <AddchartTwoToneIcon sx={{ fontSize: 128 }} />
+            <p className="text-2xl">Selecione um experimento</p>
             <p>
-              Por favor, selecione uma ou mais opções para começar a visualizar
-              os dados.
+              Por favor, selecione um experimento para começar a visualizar os dados
             </p>
           </div>
         )}
+
+        {/*MEIO*/}
+
         {/*BAIXO*/}
         <div className=" justify-center items-center w-full">
           <TabelaExp
-            experimentsData={experimentos}
-            fetchExperimento={fetchExperimento}
+            experimentsData={experiments}
+            fetchExperimento={fetchExperiment}
           />
         </div>
       </div>
