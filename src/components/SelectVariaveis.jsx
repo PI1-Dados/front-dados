@@ -1,124 +1,63 @@
 import React from "react";
 import { useState } from "react";
-import Select,{ components }  from "react-select";
-const interesses = [
-  { value: "esportes", label: "Esportes" },
-  { value: "musica", label: "Música" },
-  { value: "tecnologia", label: "Tecnologia" },
-  { value: "arte", label: "Arte e Cultura" },
-  { value: "viagens", label: "Viagens" },
-  { value: "culinaria", label: "Culinária" },
-];
-const MAX_SELECOES = 3;
-const SelectVariaveis = () => {
-  const [selecionados, setSelecionados] = useState([]);
+import Select,{components}  from "react-select";
 
-  const handleSelectChange = (opcoesSelecionadas) => {
-   
-    if (opcoesSelecionadas && opcoesSelecionadas.length > MAX_SELECOES) {
-      
-      alert(`Você só pode selecionar no máximo ${MAX_SELECOES} interesses.`);
-      return; 
-    }
-    setSelecionados(opcoesSelecionadas);
-  };
+const SelectVariaveis = ({ selecionados, onSelectionChange, options, placeholder, isMulti = true, maxSelections = Infinity }) => {
+    const [showError, setShowError] = useState(false);
 
- 
-  const isOptionDisabled = (option) => {
-    return (
-      selecionados.length >= MAX_SELECOES &&
-      !selecionados.find((s) => s.value === option.value)
+    const handleSelectChange = (opcoesSelecionadas) => {
+        if (isMulti && opcoesSelecionadas && opcoesSelecionadas.length > maxSelections) {
+            setShowError(true);
+            setTimeout(() => setShowError(false), 3000);
+            return;
+        }
+        setShowError(false);
+        onSelectionChange(opcoesSelecionadas);
+    };
+
+    const isOptionDisabled = (option) => (
+        isMulti && selecionados.length >= maxSelections && !selecionados.find((s) => s.value === option.value)
     );
-  };
-  const customStyles = {
-  control: (provided, state) => ({
-    ...provided,
-    backgroundColor: '#1A202C', // Cor de fundo principal (ex: cinza escuro) 
-    borderRadius: '40px', // Borda arredondada
-    height: '65px',
-    borderColor: state.isFocused ? '#4A5568' : '#2D3748', // Cor da borda
-    boxShadow: state.isFocused ? '0 0 0 1px #4A5568' : 'none',
-    '&:hover': {
-      borderColor: '#4A5568',
-    },
-  }),
-  placeholder: (provided) => ({
-    ...provided,
-    color: '#A0AEC0', // Cor do texto do placeholder
-  }),
-  option: (provided, state) => ({
-    ...provided,
-    borderRadius: '15px',
-    backgroundColor: state.isSelected
-      ? '#4A5568' // Cor da opção selecionada
-      : state.isFocused
-      ? '#2D3748' // Cor da opção em foco (hover)
-      : '#1A202C', // Cor de fundo das opções
-    color: '#E2E8F0', // Cor do texto das opções
-    ':active': {
-      backgroundColor: '#4A5568',
-    },
-  }),
-  multiValue: (provided) => ({
-    ...provided,
-    backgroundColor: '#4A5568',
-    borderRadius: '40px', // Cor de fundo da "pílula" do item selecionado
-  }),
-  multiValueLabel: (provided) => ({
-    ...provided,
-    color: '#E2E8F0', // Cor do texto dentro da pílula
-    fontSize: '1rem',
-    fontWeight: 'bold',
-    padding: '4px',
-  }),
-  multiValueRemove: (provided) => ({
-    ...provided,
-    color: '#A0AEC0',
-    ':hover': {
-      backgroundColor: '#E53E3E',
-      color: 'white',
-    },
-  }),
-  input: (provided) => ({
-    ...provided,
-    color: '#E2E8F0', // Cor do texto que você digita para buscar
-  }),
-  singleValue: (provided) => ({
-    ...provided,
-    color: '#E2E8F0',
-  }),
-  menu: (provided) => ({
-      ...provided,
-      backgroundColor: '#1A202C',
-      borderRadius: '15px', // Cor de fundo do menu dropdown
-  })
-};
-const CustomMultiValueLabel = (props) => {
-  return (
-    <components.MultiValueLabel {...props}>
-      {props.data.label[0]} {/* Mostra apenas a primeira letra */}
-    </components.MultiValueLabel>
-  );
-};
 
-  return (
-    <div >
-      <Select
-        className=" min-w-[200px] shadow-[30px_24px_21.2px_-1px_rgba(4,6,12,0.24)] rounded-[40px]"
-        isMulti
-        options={interesses}
-        value={selecionados}
-        onChange={handleSelectChange}
-        isOptionDisabled={isOptionDisabled}
-        placeholder="Selecione..."
-        closeMenuOnSelect={false}
-        
-        // --- Aplicando as customizações ---
-        styles={customStyles}
-        components={{ MultiValueLabel: CustomMultiValueLabel }}
-      />
-    </div>
-  );
+    const customStyles = {
+         control: (p, s) => ({ ...p, backgroundColor: 'rgba(255, 255, 255, 0.0)', borderRadius: '40px', minHeight: '65px', borderColor: s.isFocused ? '#394976' : '#394976', boxShadow: 'none', '&:hover': { borderColor: '#4A5568' } }),
+         placeholder: (p) => ({ ...p, color: '#A0AEC0' }),
+         option: (p, s) => ({ ...p, borderRadius: '15px', margin: '4px 8px', width: 'calc(100% - 16px)', backgroundColor: s.isSelected ? '#4A5568' : s.isFocused ? '#2D3748' : '#1A202C', color: '#E2E8F0', ':active': { backgroundColor: '#4A5568' } }),
+         multiValue: (p) => ({ ...p, backgroundColor: '#008940', borderRadius: '20px' }),
+         multiValueLabel: (p) => ({ ...p, color: '#E2E8F0', fontSize: '1rem', fontWeight: 'bold', padding: '4px', paddingLeft: '8px', paddingRight: '2px' }),
+         multiValueRemove: (p) => ({ ...p, color: '#A0AEC0', borderRadius: '0 20px 20px 0', ':hover': { backgroundColor: '#E53E3E', color: 'white' } }),
+         input: (p) => ({ ...p, color: '#E2E8F0' }),
+         menu: (p) => ({ ...p, backgroundColor: '#1A202C', borderRadius: '15px' }),
+         singleValue: (p) => ({ ...p, color: '#E2E8F0' }),
+    };
+    
+    // Componente customizado para mostrar apenas a primeira letra no multi-select
+    const CustomMultiValueLabel = (props) => (
+      <components.MultiValueLabel {...props}>
+        {props.data.label[0]}
+      </components.MultiValueLabel>
+    );
+    
+    // Define quais componentes customizados usar, aplicando a lógica apenas para multi-select
+    const customComponents = isMulti ? { MultiValueLabel: CustomMultiValueLabel } : {};
+    
+    return (
+        <div className="w-full">
+            <Select 
+                className="shadow-[10px_10px_20px_rgba(0,0,0,0.2)] rounded-[40px]" 
+                isMulti={isMulti} 
+                options={options} 
+                value={selecionados} 
+                onChange={handleSelectChange} 
+                isOptionDisabled={isOptionDisabled} 
+                placeholder={placeholder} 
+                closeMenuOnSelect={!isMulti} 
+                styles={customStyles}
+                components={customComponents} // Usa os componentes customizados
+            />
+            {showError && <p className="text-red-400 text-center mt-2 text-sm">Você só pode selecionar no máximo {maxSelections} opções.</p>}
+        </div>
+    );
 };
 
 export default SelectVariaveis;
