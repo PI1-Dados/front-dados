@@ -75,7 +75,7 @@ function App() {
         velocity.push({ timestamp: data.timestamp, velocity: data.speed_kmph, unit: "km/h" });
         distance.push({ timestamp: data.timestamp, distance: parseFloat(data.distancia.toFixed(2)) });
         acceleration.push({ timestamp: data.timestamp, accel_x: data.accel_x, accel_y: data.accel_y, accel_z: data.accel_z });
-        height.push({ timestamp: data.timestamp, height: 5 });
+        height.push({ timestamp: data.timestamp, height: data.altura_lancamento });
       });
 
       setChartData({ velocity, distance, acceleration, height });
