@@ -13,6 +13,12 @@ import AddchartTwoToneIcon from '@mui/icons-material/AddchartTwoTone';
 import AccelChartCard from "./components/AccelChartCard";
 
 function App() {
+  
+ const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+  
+  
   // modais
   const [experiments, setExperiments] = useState([]);
   const [experiment, setExperiment] = useState(null);
@@ -110,13 +116,14 @@ function App() {
 
   return (
     <div className="flex justify-center items-center  w-screen bg-[#0C101C] font-jura ">
+      <ModalCadastro isOpen={isModalOpen} onClose={closeModal} />
       <div
         className="border-2 
   border-[#394976] 
   bg-[linear-gradient(112deg,_#161D30_20.1%,_rgba(42,53,83,0.73)_94.38%)] 
   shadow-[30px_24px_21.2px_-1px_rgba(4,6,12,0.24)] rounded-[40px] mt-5 w-[90vw] flex flex-col gap-2"
       >
-        <Header />
+        <Header openModal={openModal}/>
         {chartData != null ? (
           <>
             <div className=" w-full">
@@ -199,8 +206,11 @@ function App() {
             experimentsData={experiments}
             fetchExperimento={fetchExperiment}
           />
+          
         </div>
+        
       </div>
+      
     </div>
   );
 }
