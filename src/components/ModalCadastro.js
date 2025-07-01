@@ -1,19 +1,20 @@
 import React, { useState, useRef } from 'react';
 import { X, Upload } from 'lucide-react';
 import axios from 'axios';
+import { createExperiment } from '../api/routes';
 
 const ModalCadastro = ({isOpen, onClose}) => {
     const [formData, setFormData] = useState({
-    nome: '',
-    distancia_alvo: '',
-    data: '',
-    pressao: '',
-    qtd_agua: '',
-    peso: '',
+    nomeExperimento: '',
+    distanciaAlvo: '',
+    dataExperimento: '',
+    pressaoBar: '',
+    volumeAgua: '',
+    massaTotalFoguete: '',
   });
 
  
-  const [csvFile, setCsvFile] = useState(null);
+  const [arquivoDados, setCsvFile] = useState(null);
   
   
   const fileInputRef = useRef(null);
@@ -66,17 +67,19 @@ const ModalCadastro = ({isOpen, onClose}) => {
     }
 
     
-    if (csvFile) {
-      dataToSend.append('csvFile', csvFile);
+    if (arquivoDados) {
+      dataToSend.append('arquivoDados', arquivoDados);
     }
 
     try {
+      const response = await createExperiment(dataToSend);
+
     
-      const response = await axios.post('/api/lancamento', dataToSend, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      // const response = await axios.post('localhost:8000/experimentos/novo', dataToSend, {
+      //   headers: {
+      //     'Content-Type': 'multipart/form-data',
+      //   },
+      // });
       console.log('Sucesso:', response.data);
       onClose();
     } catch (error) {
@@ -131,12 +134,12 @@ const ModalCadastro = ({isOpen, onClose}) => {
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
             {[
-              { label: 'Nome', id: 'nome' },
-              { label: 'DISTÂNCIA ALVO', id: 'distancia_alvo' },
-              { label: 'DATA', id: 'data', type: 'date' },
-              { label: 'PRESSÃO', id: 'pressao' },
-              { label: 'QTD ÁGUA', id: 'qtd_agua' },
-              { label: 'PESO', id: 'peso' },
+              { label: 'nomeExperimento', id: 'nomeExperimento' },
+              { label: 'DISTÂNCIA ALVO', id: 'distanciaAlvo' },
+              { label: 'DATA', id: 'dataExperimento', type: 'date' },
+              { label: 'PRESSÃO (bar)', id: 'pressaoBar' },
+              { label: 'VOLUME ÁGUA (ml)', id: 'volumeAgua' },
+              { label: 'MASSA (mg)', id: 'massaTotalFoguete' },
             ].map((field) => (
               <div key={field.id}>
                 <label htmlFor={field.id} className="block text-sm font-medium text-gray-400 mb-1">
@@ -175,10 +178,10 @@ const ModalCadastro = ({isOpen, onClose}) => {
               IMPORTAR CSV
             </button>
 
-            {/* Exibe o nome do arquivo selecionado */}
-            {csvFile && (
+            {/* Exibe o nomeExperimento do arquivo selecionado */}
+            {arquivoDados && (
               <div className="text-center text-sm text-gray-300">
-                Arquivo selecionado: <span className="font-medium text-green-400">{csvFile.name}</span>
+                Arquivo selecionado: <span className="font-medium text-green-400">{arquivoDados.name}</span>
               </div>
             )}
 

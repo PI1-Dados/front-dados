@@ -6,7 +6,7 @@ export const createExperiment = async (data) => {
     try {
         const response = await axios.post(
             `${BASE_URL}/novo`,
-            JSON.stringify(data)
+            data
         )
         return response.data;   
     } catch (err) {
