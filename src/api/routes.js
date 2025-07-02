@@ -59,6 +59,21 @@ export const deleteExperiment = async (id) => {
         )
         return response.data;   
     } catch (err) {
+        console.error("Error deleting experiment", err)
+        throw err;
+    }
+}
+
+export const downloadCsv = async (id) => {
+    try {
+        const response = await axios.get(
+            `${BASE_URL}/download-csv/${id}`,
+            {
+                responseType: 'blob'
+            }
+        )
+        return response.data;   
+    } catch (err) {
         console.error("Error deleting experiments", err)
         throw err;
     }

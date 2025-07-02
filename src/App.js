@@ -6,7 +6,7 @@ import QuadroInfo from "./components/QuadroInfo";
 import QuadroMINMAX from "./components/QuadroMINMAX";
 import SelectVariaveis from "./components/SelectVariaveis";
 import TabelaExp from "./components/TabelaExp";
-import { getExperiment, getExperiments } from "./api/routes";
+import { downloadCsv, getExperiment, getExperiments } from "./api/routes";
 import ModalCadastro from "./components/ModalCadastro";
 import Header from "./components/Header";
 import AddchartTwoToneIcon from '@mui/icons-material/AddchartTwoTone';
@@ -14,10 +14,9 @@ import AccelChartCard from "./components/AccelChartCard";
 
 function App() {
   
- const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-  
   
   // modais
   const [experiments, setExperiments] = useState([]);
@@ -26,7 +25,6 @@ function App() {
   const [chartData, setChartData] = useState(null);
 
   const [dadosVariavelQuadro, setDadosVariavelQuadro] = useState(null);
-
 
   const interesses = [
     { value: "velocity", label: "Velocidade" },
@@ -49,7 +47,6 @@ function App() {
     const fetchExperiments = async () => {
       try {
         const response = await getExperiments();
-        // console.log(response);
         setExperiments(response.experimentos);
       } catch (err) {
         console.error(err);
@@ -66,6 +63,30 @@ function App() {
       setRawChartData(response.dados_associados);
     } catch (err) {
       console.error(err);
+    }
+  }
+
+  const fetchCsv = async (id) => {
+    try {
+      const response = await downloadCsv(id);
+      console.log(response);
+      // Cria um link para o Blob
+      const url = window.URL.createObjectURL(new Blob([response]));
+
+      // Cria um elemento <a> temporário
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `arquivo-${id}.csv`); // Nome do arquivo
+
+      // Simula o clique no link
+      document.body.appendChild(link);
+      link.click();
+
+      // Limpa o link após o download
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error(err);      
     }
   }
 
@@ -123,7 +144,7 @@ function App() {
   bg-[linear-gradient(112deg,_#161D30_20.1%,_rgba(42,53,83,0.73)_94.38%)] 
   shadow-[30px_24px_21.2px_-1px_rgba(4,6,12,0.24)] rounded-[40px] mt-5 w-[90vw] flex flex-col gap-2"
       >
-        <Header openModal={openModal}/>
+        <Header openModal={openModal} experiment={experiment} downloadCsv={fetchCsv}/>
         {chartData != null ? (
           <>
             <div className=" w-full">

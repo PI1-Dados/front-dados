@@ -1,10 +1,9 @@
 import React, { useState, useRef } from 'react';
 import { X, Upload } from 'lucide-react';
-import axios from 'axios';
 import { createExperiment } from '../api/routes';
 
 const ModalCadastro = ({isOpen, onClose}) => {
-    const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({
     nomeExperimento: '',
     distanciaAlvo: '',
     dataExperimento: '',
@@ -13,17 +12,13 @@ const ModalCadastro = ({isOpen, onClose}) => {
     massaTotalFoguete: '',
   });
 
- 
   const [arquivoDados, setCsvFile] = useState(null);
-  
   
   const fileInputRef = useRef(null);
 
-   
   if (!isOpen) {
     return null;
   }
-
   
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -32,7 +27,6 @@ const ModalCadastro = ({isOpen, onClose}) => {
       [name]: value,
     }));
   };
-
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -44,28 +38,23 @@ const ModalCadastro = ({isOpen, onClose}) => {
       setCsvFile(null);
     }
   };
-
   
   const handleImportClick = () => {
     fileInputRef.current.click();
   };
-
   
   const handleModalContentClick = (e) => {
     e.stopPropagation();
   };
-
  
   const handleSubmit = async (e) => {
     e.preventDefault(); 
     
     const dataToSend = new FormData();
-
     
     for (const key in formData) {
       dataToSend.append(key, formData[key]);
     }
-
     
     if (arquivoDados) {
       dataToSend.append('arquivoDados', arquivoDados);
@@ -73,18 +62,10 @@ const ModalCadastro = ({isOpen, onClose}) => {
 
     try {
       const response = await createExperiment(dataToSend);
-
-    
-      // const response = await axios.post('localhost:8000/experimentos/novo', dataToSend, {
-      //   headers: {
-      //     'Content-Type': 'multipart/form-data',
-      //   },
-      // });
       console.log('Sucesso:', response.data);
       onClose();
     } catch (error) {
       console.error('Erro ao enviar o formulário:', error);
-      
     }
   };
 
@@ -94,7 +75,6 @@ const ModalCadastro = ({isOpen, onClose}) => {
       onClick={onClose}
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
     >
-    
       <style>{`
         @keyframes fade-in-scale {
           from {

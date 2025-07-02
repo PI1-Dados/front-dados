@@ -1,27 +1,5 @@
 import React from 'react';
 
-// const StatusBadge = ({ status }) => {
-//   const baseClasses = 'font-bold uppercase text-xs';
-//   let colorClass = '';
-
-//   switch (status.toLowerCase()) {
-//     case 'sucesso':
-//       colorClass = 'text-green-400';
-//       break;
-//     case 'falha':
-//       colorClass = 'text-red-400';
-//       break;
-//     case 'em andamento':
-//       colorClass = 'text-yellow-400';
-//       break;
-//     default:
-//       colorClass = 'text-gray-400';
-//   }
-
-//   return <span className={`${baseClasses} ${colorClass}`}>{status}</span>;
-// };
-
-
 const TabelaExp = ({ experimentsData, fetchExperimento }) =>{
   return (
     <div className='w-full flex justify-center items-center p-5'>

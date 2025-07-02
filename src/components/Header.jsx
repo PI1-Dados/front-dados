@@ -1,7 +1,7 @@
 import Unb from "../assets/Unb.png";
 import { useEffect, useState } from "react";
 
-const Header = ({openModal}) => {
+const Header = ({openModal, experiment, downloadCsv}) => {
  
   return (
     <div className=" w-full">
@@ -11,7 +11,9 @@ const Header = ({openModal}) => {
         <button onClick={openModal} className="bg-[#008940] text-white text-2xl p-3 rounded-[25px]">
           Registrar Lançamento
         </button>
-        <button className="bg-[#133E79] text-white text-2xl p-3 rounded-[25px]">
+        <button 
+          onClick={() => downloadCsv(experiment.id)} disabled={experiment === null} 
+          className="bg-[#133E79] text-white text-2xl p-3 rounded-[25px] disabled:bg-gray-600 ">
           DOWNLOAD CSV
         </button>
       </div>
