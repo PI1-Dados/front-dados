@@ -15,18 +15,17 @@ export const createExperiment = async (data) => {
     }
 }
 
-export const updateExperiment = async (id, data) => {
-    try {
-        const response = await axios.patch(
-            `${BASE_URL}/${id}`,
-            data
-        )
-        return response.data;   
-    } catch (err) {
-        console.error("Error saving experiment", err)
-        throw err;
-    }
-}
+
+
+export const updateExperiment = async (id, experimentData) => {
+  try {
+    const response = await axios.put(`/experimentos/${id}`, experimentData);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao atualizar o experimento:", error);
+    throw error;
+  }
+};
 
 export const getExperiment = async (id) => {
     try {

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TabelaExp = ({ experimentsData, fetchExperimento }) =>{
+const TabelaExp = ({ experimentsData, fetchExperimento, onEdit  }) =>{
   return (
     <div className='w-full flex justify-center items-center p-5'>
       <div className="w-[100%] items-center justify-center    rounded-[20px] border border-[#394976] bg-[linear-gradient(112deg,_#161D30_20.1%,_rgba(42,53,83,0.73)_94.38%)] shadow-lg">
@@ -42,7 +42,7 @@ const TabelaExp = ({ experimentsData, fetchExperimento }) =>{
                       >
                         VER
                       </button>
-                      <button className="bg-blue-700 text-white text-xs font-bold py-2 px-5 rounded-full hover:bg-blue-800 transition-colors duration-200">
+                      <button title="Editar dados do lançamento" onClick={() => onEdit(exp)} className="bg-blue-700 text-white text-xs font-bold py-2 px-5 rounded-full hover:bg-blue-800 transition-colors duration-200">
                         EDITAR
                       </button>
                     </div>
