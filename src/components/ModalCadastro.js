@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { X, Upload } from 'lucide-react';
 import { createExperiment } from '../api/routes';
+import { toast } from 'react-toastify';
 
 const ModalCadastro = ({isOpen, onClose}) => {
   const [formData, setFormData] = useState({
@@ -64,8 +65,10 @@ const ModalCadastro = ({isOpen, onClose}) => {
       const response = await createExperiment(dataToSend);
       console.log('Sucesso:', response.data);
       onClose();
+      toast.success("Experimento cadastrado com sucesso!");
     } catch (error) {
       console.error('Erro ao enviar o formulário:', error);
+      toast.error("Erro ao cadastrar experimento!");
     }
   };
 

@@ -11,6 +11,7 @@ import ModalCadastro from "./components/ModalCadastro";
 import Header from "./components/Header";
 import AddchartTwoToneIcon from '@mui/icons-material/AddchartTwoTone';
 import AccelChartCard from "./components/AccelChartCard";
+import { toast } from "react-toastify";
 
 function App() {
   
@@ -49,6 +50,7 @@ function App() {
         const response = await getExperiments();
         setExperiments(response.experimentos);
       } catch (err) {
+        toast.error("Erro ao carregar experimentos!");
         console.error(err);
       }
     }
@@ -62,6 +64,7 @@ function App() {
       setExperiment(response.experimento);
       setRawChartData(response.dados_associados);
     } catch (err) {
+      toast.error("Erro ao carregar experimento!");
       console.error(err);
     }
   }
