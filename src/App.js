@@ -65,6 +65,7 @@ function App() {
     try {
       const response = await getExperiment(id);
       setExperiment(response.experimento);
+      console.log(experiment)
       setRawChartData(response.dados_associados);
     } catch (err) {
       toast.error("Erro ao carregar experimento!");
@@ -143,7 +144,7 @@ function App() {
                 <div className="flex flex-col justify-center items-center">
                   <div className="flex items-center gap-4">
                     <h1 className="text-[64px] font-bold text-white mb-2">
-                      {experiment.nome}
+                      {experiment.nomeExperimento}
                     </h1>
   
                     <button 
@@ -192,6 +193,7 @@ function App() {
                       dataKey={opcao.value}
                       chartData={chartData[opcao.value]}
                       unit={unidades[opcao.value]}
+                      experiment={experiment}
                     />
                   )
                 )}

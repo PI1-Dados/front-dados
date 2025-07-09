@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { updateExperiment } from '../api/routes'; 
+import { toast } from 'react-toastify';
 
 const ModalEdicao = ({ isOpen, onClose, experimentData }) => {
   
@@ -16,6 +17,7 @@ const ModalEdicao = ({ isOpen, onClose, experimentData }) => {
   
   useEffect(() => {
     if (experimentData) {
+      console.log(experimentData)
       setFormData({
         nomeExperimento: experimentData.nomeExperimento || '',
         distanciaAlvo: experimentData.distanciaAlvo || '',
@@ -71,11 +73,11 @@ const ModalEdicao = ({ isOpen, onClose, experimentData }) => {
     try {
       const response = await updateExperiment(experimentData.id, dataToSend);
       console.log('Sucesso:', response);
-      alert('Experimento atualizado com sucesso!');
+      toast.success("Experimento atualizado com sucesso!");
       onClose(); 
     } catch (error) {
       console.error('Erro ao atualizar o formulário:', error);
-      alert('Falha ao atualizar o experimento.');
+      toast.error("Falha ao atualizar o experimento");
     }
   };
 

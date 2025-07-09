@@ -27,11 +27,11 @@ const TabelaExp = ({ experimentsData, fetchExperimento, onEdit  }) =>{
                   
                   {/* Células de Dados */}
                   <td className="py-4 px-4 text-gray-200">{exp.id}</td>
-                  <td className="py-4 px-4 text-gray-200">{exp.distancia_alvo}</td>
-                  <td className="py-4 px-4 text-gray-200">{exp.data}</td>
-                  <td className="py-4 px-4 text-gray-200">{exp.massa_total_foguete} g</td>
-                  <td className="py-4 px-4 text-gray-200">{exp.pressao_psi} bar</td>
-                  <td className="py-4 px-4 text-gray-200">{exp.volume_agua}ml</td>
+                  <td className="py-4 px-4 text-gray-200">{exp.distanciaAlvo}</td>
+                  <td className="py-4 px-4 text-gray-200">{exp.dataExperimento}</td>
+                  <td className="py-4 px-4 text-gray-200">{exp.massaTotalFoguete} g</td>
+                  <td className="py-4 px-4 text-gray-200">{exp.pressaoBar} bar</td>
+                  <td className="py-4 px-4 text-gray-200">{exp.volumeAgua}ml</td>
                   
                   {/* Célula de Ações com os botões */}
                   <td className="py-4 px-4">

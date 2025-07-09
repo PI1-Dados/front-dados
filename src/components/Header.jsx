@@ -14,7 +14,7 @@ const Header = ({openModal, experiment, downloadCsv}) => {
         <button 
           onClick={() => downloadCsv(experiment.id)} disabled={experiment === null} 
           className="bg-[#133E79] text-white text-2xl p-3 rounded-[25px] disabled:bg-gray-600 ">
-          DOWNLOAD CSV
+          EXPORTAR PARA CSV
         </button>
       </div>
     </div>

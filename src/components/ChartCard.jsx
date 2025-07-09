@@ -1,7 +1,7 @@
 import React from 'react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
 
-const ChartCard = ({ title, dataKey, chartData, unit }) => {
+const ChartCard = ({ title, dataKey, chartData, unit, experiment }) => {
   return (
     <div className=" p-4
   shadow-[30px_24px_21.2px_-1px_rgba(4,6,12,0.24)] rounded-[40px] border border-[#394976] w-full flex flex-col items-center justify-center m-2">
@@ -30,6 +30,9 @@ const ChartCard = ({ title, dataKey, chartData, unit }) => {
             labelStyle={{ color: '#ffffff' }}
             itemStyle={{ color: '#ffffff' }}
           />
+          {title === "Distancia" && (
+            <ReferenceLine y={experiment.distanciaAlvo} label="Alvo" stroke="red" strokeDasharray="3 3" />
+          )}
           <Area type="monotone" dataKey={`${dataKey}`} stroke="#38a169" fill="url(#colorGradient)" strokeWidth={2} unit={unit}/>
           <defs>
             <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
