@@ -81,6 +81,14 @@ const ModalCadastro = ({ isOpen, onClose, setExperiments }) => {
       const experiments = await getExperiments();
       setExperiments(experiments.experimentos);
       console.log('Sucesso:', response.data);
+      setFormData({
+        nomeExperimento: '',
+        distanciaAlvo: '',
+        dataExperimento: '',
+        pressaoBar: '',
+        volumeAgua: '',
+        massaTotalFoguete: '',
+      })
       onClose(); // Fecha o modal em caso de sucesso
       toast.success("Experimento cadastrado com sucesso!");
     } catch (error) {
