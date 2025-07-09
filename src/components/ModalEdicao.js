@@ -5,25 +5,24 @@ import { updateExperiment } from '../api/routes';
 const ModalEdicao = ({ isOpen, onClose, experimentData }) => {
   
   const [formData, setFormData] = useState({
-    nome: '',
-    distancia_alvo: '',
-    data_lancamento: '',
-    pressao: '',
-    volume_agua_ml: '',
-    massa_foguete_gramas: '',
+    nomeExperimento: '',
+    distanciaAlvo: '',
+    dataExperimento: '',
+    pressaoBar: '',
+    volumeAgua: '',
+    massaTotalFoguete: '',
   });
 
   
   useEffect(() => {
     if (experimentData) {
       setFormData({
-        nome: experimentData.nome || '',
-        distancia_alvo: experimentData.distancia_alvo || '',
-    
-        data_lancamento: experimentData.data_lancamento ? new Date(experimentData.data_lancamento).toISOString().split('T')[0] : '',
-        pressao: experimentData.pressao || '',
-        volume_agua_ml: experimentData.volume_agua_ml || '',
-        massa_foguete_gramas: experimentData.massa_foguete_gramas || '',
+        nomeExperimento: experimentData.nomeExperimento || '',
+        distanciaAlvo: experimentData.distanciaAlvo || '',
+        dataExperimento: experimentData.dataExperimento ? new Date(experimentData.dataExperimento).toISOString().split('T')[0] : '',
+        pressaoBar: experimentData.pressaoBar || '',
+        volumeAgua: experimentData.volumeAgua || '',
+        massaTotalFoguete: experimentData.massaTotalFoguete || '',
       });
     }
   }, [experimentData]); 
@@ -54,9 +53,23 @@ const ModalEdicao = ({ isOpen, onClose, experimentData }) => {
       return;
     }
 
+    // realiza cópia dos dados para formatar data
+    const dataToSend = new FormData();
+    const dataToProcess = { ...formData };
+
+    if (dataToProcess.dataExperimento) {
+        const parts = dataToProcess.dataExperimento.split('-'); // Divide "2024-07-02" em ["2024", "07", "02"]
+        if (parts.length === 3) {
+            dataToProcess.dataExperimento = `${parts[2]}/${parts[1]}/${parts[0]}`; // Monta "02/07/2024"
+        }
+    }
+
+    for (const key in dataToProcess) {
+      dataToSend.append(key, dataToProcess[key]);
+    }
+
     try {
-    
-      const response = await updateExperiment(experimentData.id, formData);
+      const response = await updateExperiment(experimentData.id, dataToSend);
       console.log('Sucesso:', response);
       alert('Experimento atualizado com sucesso!');
       onClose(); 
@@ -104,12 +117,12 @@ const ModalEdicao = ({ isOpen, onClose, experimentData }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
          
             {[
-              { label: 'NOME DO EXPERIMENTO', id: 'nome', type: 'text' },
-              { label: 'DISTÂNCIA ALVO (m)', id: 'distancia_alvo', type: 'number' },
-              { label: 'DATA', id: 'data_lancamento', type: 'date' },
-              { label: 'PRESSÃO (bar)', id: 'pressao', type: 'number' },
-              { label: 'VOLUME ÁGUA (ml)', id: 'volume_agua_ml', type: 'number' },
-              { label: 'MASSA (g)', id: 'massa_foguete_gramas', type: 'number' },
+              { label: 'NOME DO EXPERIMENTO', id: 'nomeExperimento', type: 'text' },
+              { label: 'DISTÂNCIA ALVO (m)', id: 'distanciaAlvo', type: 'number' },
+              { label: 'DATA', id: 'dataExperimento', type: 'date' },
+              { label: 'PRESSÃO (bar)', id: 'pressaoBar', type: 'number' },
+              { label: 'VOLUME ÁGUA (ml)', id: 'volumeAgua', type: 'number' },
+              { label: 'MASSA (g)', id: 'massaTotalFoguete', type: 'number' },
             ].map((field) => (
               <div key={field.id}>
                 <label htmlFor={field.id} className="block text-sm font-medium text-gray-400 mb-1">
