@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react';
 import { X, Upload } from 'lucide-react';
-import { createExperiment } from '../api/routes';
+import { createExperiment, getExperiments } from '../api/routes';
 import { toast } from 'react-toastify';
 
-const ModalCadastro = ({ isOpen, onClose }) => {
+const ModalCadastro = ({ isOpen, onClose, setExperiments }) => {
   const [formData, setFormData] = useState({
     nomeExperimento: '',
     distanciaAlvo: '',
@@ -78,6 +78,8 @@ const ModalCadastro = ({ isOpen, onClose }) => {
     try {
       // Envia os dados para a API
       const response = await createExperiment(dataToSend);
+      const experiments = await getExperiments();
+      setExperiments(experiments.experimentos);
       console.log('Sucesso:', response.data);
       onClose(); // Fecha o modal em caso de sucesso
       toast.success("Experimento cadastrado com sucesso!");

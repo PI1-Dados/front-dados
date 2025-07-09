@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
-import { updateExperiment } from '../api/routes'; 
+import { getExperiment, updateExperiment } from '../api/routes'; 
 import { toast } from 'react-toastify';
 
-const ModalEdicao = ({ isOpen, onClose, experimentData }) => {
+const ModalEdicao = ({ isOpen, onClose, experimentData, setExperimentData, setRawChartData }) => {
   
   const [formData, setFormData] = useState({
     nomeExperimento: '',
@@ -72,7 +72,11 @@ const ModalEdicao = ({ isOpen, onClose, experimentData }) => {
 
     try {
       const response = await updateExperiment(experimentData.id, dataToSend);
-      console.log('Sucesso:', response);
+      const edittedResponse = await getExperiment(experimentData.id)
+      // console.log(edittedResponse.experimento)
+      setExperimentData(edittedResponse.experimento);
+      setRawChartData(edittedResponse.dados_associados);
+      // console.log('Sucesso:', response);
       toast.success("Experimento atualizado com sucesso!");
       onClose(); 
     } catch (error) {
